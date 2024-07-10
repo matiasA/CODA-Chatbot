@@ -24,27 +24,30 @@ class CODA_Chatbot_Settings {
 
     public function enqueue_media_uploader() {
         wp_enqueue_media();
-        ?>
-        <script type="text/javascript">
-            jQuery(document).ready(function($) {
-                $('#coda_chatbot_bot_avatar_button').click(function(e) {
-                    e.preventDefault();
-                    var image = wp.media({
-                        title: 'Select or Upload Image',
-                        button: {
-                            text: 'Use this image'
-                        },
-                        multiple: false
-                    }).open()
-                    .on('select', function() {
-                        var uploaded_image = image.state().get('selection').first();
-                        var image_url = uploaded_image.toJSON().url;
-                        $('#coda_chatbot_bot_avatar').val(image_url);
+        // Instead of directly outputting the script, we'll enqueue it to be output at the right time
+        add_action('admin_footer', function() {
+            ?>
+            <script type="text/javascript">
+                jQuery(document).ready(function($) {
+                    $('#coda_chatbot_bot_avatar_button').click(function(e) {
+                        e.preventDefault();
+                        var image = wp.media({
+                            title: 'Select or Upload Image',
+                            button: {
+                                text: 'Use this image'
+                            },
+                            multiple: false
+                        }).open()
+                        .on('select', function() {
+                            var uploaded_image = image.state().get('selection').first();
+                            var image_url = uploaded_image.toJSON().url;
+                            $('#coda_chatbot_bot_avatar').val(image_url);
+                        });
                     });
                 });
-            });
-        </script>
-        <?php
+            </script>
+            <?php
+        });
     }
 
     public function settings_page() {
@@ -89,4 +92,3 @@ class CODA_Chatbot_Settings {
     }
 }
 ?>
-
