@@ -41,7 +41,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const userMsgElement = document.createElement('div');
         userMsgElement.className = 'user-message';
-        userMsgElement.innerText = userMessage;
+        userMsgElement.innerHTML = `
+            <span>${userMessage}</span>
+            <img src="${botAvatar}" alt="User Avatar">
+        `;
         messages.appendChild(userMsgElement);
 
         fetch('https://api.openai.com/v1/chat/completions', {

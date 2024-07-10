@@ -104,8 +104,8 @@
     color: white;
     align-self: flex-end;
     justify-content: flex-end;
-    flex-direction: row-reverse;
     text-align: right;
+    flex-direction: row-reverse;
 }
 
 .bot-message {
