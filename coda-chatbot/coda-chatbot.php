@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: AI Chatbot
+Plugin Name: CODA Chatbot
 Description: A visually attractive AI chatbot for WordPress.
 Version: 1.0
-Author: Your Name
+Author: CODA.uno
 */
 
 // Evitar el acceso directo
@@ -20,9 +20,9 @@ require_once CODA_CHATBOT_DIR . 'includes/class-coda-chatbot.php';
 require_once CODA_CHATBOT_DIR . 'includes/class-coda-chatbot-settings.php';
 
 // Inicializar el plugin
-function ai_chatbot_init() {
+function coda_chatbot_init() {
     new CODA_Chatbot();
     new CODA_Chatbot_Settings();
 }
-add_action('plugins_loaded', 'ai_chatbot_init');
+add_action('plugins_loaded', 'coda_chatbot_init');
 ?>

@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const chatbot = document.getElementById('ai-chatbot');
-    const apiKey = aiChatbotOptions.apiKey;
-    const welcomeMessage = aiChatbotOptions.welcomeMessage;
-    const botAvatar = aiChatbotOptions.botAvatar || 'https://via.placeholder.com/40'; // Default avatar image
+    const chatbot = document.getElementById('coda-chatbot');
+    const apiKey = codaChatbotOptions.apiKey;
+    const welcomeMessage = codaChatbotOptions.welcomeMessage;
+    const botAvatar = codaChatbotOptions.botAvatar || 'https://via.placeholder.com/40'; // Default avatar image
 
     chatbot.innerHTML = `
         <div class="chatbot-container">
