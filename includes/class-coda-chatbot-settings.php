@@ -30,7 +30,10 @@ class CODA_Chatbot_Settings {
                 $('#coda_chatbot_bot_avatar_button').click(function(e) {
                     e.preventDefault();
                     var image = wp.media({
-                        title: 'Upload Image',
+                        title: 'Select or Upload Image',
+                        button: {
+                            text: 'Use this image'
+                        },
                         multiple: false
                     }).open()
                     .on('select', function() {
@@ -86,3 +89,4 @@ class CODA_Chatbot_Settings {
     }
 }
 ?>
+
