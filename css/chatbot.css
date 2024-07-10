@@ -103,20 +103,22 @@
     background: #007aff;
     color: white;
     align-self: flex-end;
-    justify-content: flex-end;
+    text-align: right;
 }
 
 .bot-message {
     background: #e0e0e0;
     color: #333;
     align-self: flex-start;
+    text-align: left;
 }
 
-.bot-message img, .user-message img {
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
+.bot-message img {
     margin-right: 10px;
+}
+
+.user-message img {
+    margin-left: 10px;
 }
 
 #coda-chatbot.minimized {
