@@ -95,23 +95,24 @@
     border-radius: 10px;
     max-width: 70%;
     word-wrap: break-word;
+    display: flex;
+    align-items: center;
 }
 
 .user-message {
     background: #007aff;
     color: white;
     align-self: flex-end;
+    justify-content: flex-end;
 }
 
 .bot-message {
     background: #e0e0e0;
     color: #333;
     align-self: flex-start;
-    display: flex;
-    align-items: center;
 }
 
-.bot-message img {
+.bot-message img, .user-message img {
     border-radius: 50%;
     width: 30px;
     height: 30px;
