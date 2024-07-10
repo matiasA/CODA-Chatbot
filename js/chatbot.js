@@ -16,12 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <button class="minimize-btn">-</button>
             </div>
-            <div class="chatbot-messages">
-                <div class="bot-message">
-                    <img src="${botAvatar}" alt="Bot Avatar">
-                    <span>${welcomeMessage}</span>
-                </div>
-            </div>
+            <div class="chatbot-messages"></div>
             <div class="chatbot-input-container">
                 <input type="text" class="chatbot-input" placeholder="Write a message...">
                 <button class="chatbot-send-btn">➤</button>
@@ -33,6 +28,28 @@ document.addEventListener('DOMContentLoaded', function() {
     const input = document.querySelector('.chatbot-input');
     const sendBtn = document.querySelector('.chatbot-send-btn');
     const minimizeBtn = document.querySelector('.minimize-btn');
+
+    // Load messages from localStorage
+    function loadMessages() {
+        const savedMessages = JSON.parse(localStorage.getItem('chatbotMessages')) || [];
+        savedMessages.forEach(msg => {
+            const messageElement = document.createElement('div');
+            messageElement.className = msg.className;
+            messageElement.innerHTML = `
+                ${msg.img ? `<img src="${msg.img}" alt="Avatar">` : ''}
+                <span>${msg.text}</span>
+            `;
+            messages.appendChild(messageElement);
+        });
+        messages.scrollTop = messages.scrollHeight;
+    }
+
+    // Save messages to localStorage
+    function saveMessage(className, img, text) {
+        const savedMessages = JSON.parse(localStorage.getItem('chatbotMessages')) || [];
+        savedMessages.push({ className, img, text });
+        localStorage.setItem('chatbotMessages', JSON.stringify(savedMessages));
+    }
 
     function sendMessage() {
         const userMessage = input.value;
@@ -46,6 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <img src="${botAvatar}" alt="User Avatar">
         `;
         messages.appendChild(userMsgElement);
+        saveMessage('user-message', botAvatar, userMessage);
 
         fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
@@ -67,6 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <span>${data.choices[0].message.content}</span>
             `;
             messages.appendChild(botMsgElement);
+            saveMessage('bot-message', botAvatar, data.choices[0].message.content);
 
             // Scroll to the bottom of the chat messages
             messages.scrollTop = messages.scrollHeight;
@@ -79,6 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <span>Error: ${error.message}</span>
             `;
             messages.appendChild(botMsgElement);
+            saveMessage('bot-message', botAvatar, `Error: ${error.message}`);
 
             // Scroll to the bottom of the chat messages
             messages.scrollTop = messages.scrollHeight;
@@ -97,4 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
         chatbot.classList.toggle('minimized');
         minimizeBtn.textContent = chatbot.classList.contains('minimized') ? '+' : '-';
     });
+
+    // Load existing messages from localStorage
+    loadMessages();
 });
