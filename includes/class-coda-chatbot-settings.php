@@ -178,5 +178,6 @@ class CODA_Chatbot_Settings {
     }
 }
 
-if (is_admin())
+if (is_admin()) {
     $coda_chatbot_settings = new CODA_Chatbot_Settings();
+}
