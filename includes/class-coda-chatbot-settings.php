@@ -54,6 +54,7 @@ class CODA_Chatbot_Settings {
         ?>
         <div class="wrap">
             <h1>AI Chatbot Settings</h1>
+            <?php settings_errors(); // Mostrar mensajes de error/success ?>
             <form method="post" action="options.php">
                 <?php
                 settings_fields('coda_chatbot_settings_group');
@@ -109,6 +110,7 @@ class CODA_Chatbot_Settings {
         </div>
         <?php
     }
+
 }
 
 if (is_admin()) {
