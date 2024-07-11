@@ -1,10 +1,6 @@
 <?php
-if (!defined('ABSPATH')) {
-    exit;
-}
-
 class CODA_Chatbot_Settings {
-    
+
     public function __construct() {
         add_action( 'admin_menu', array( $this, 'add_plugin_page' ) );
         add_action( 'admin_init', array( $this, 'register_settings' ) );
@@ -64,5 +60,4 @@ class CODA_Chatbot_Settings {
 if ( is_admin() ) {
     $coda_chatbot_settings = new CODA_Chatbot_Settings();
 }
-
 ?>
