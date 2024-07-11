@@ -1,4 +1,3 @@
-<?php
 class CODA_Chatbot_Settings {
 
     public function __construct() {
@@ -7,12 +6,14 @@ class CODA_Chatbot_Settings {
     }
 
     public function add_plugin_page() {
-        add_options_page(
-            'AI Chatbot Settings',
-            'AI Chatbot',
-            'manage_options',
-            'coda-chatbot-settings',
-            array( $this, 'display_plugin_admin_page' )
+        add_menu_page(
+            'AI Chatbot Settings', // Page title
+            'AI Chatbot', // Menu title
+            'manage_options', // Capability
+            'coda-chatbot-settings', // Menu slug
+            array( $this, 'display_plugin_admin_page' ), // Function to display the page
+            'dashicons-admin-comments', // Icon URL or Dashicon class
+            6 // Position
         );
     }
 
@@ -20,9 +21,9 @@ class CODA_Chatbot_Settings {
         register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_api_key' );
         register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_welcome_message' );
         register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_bot_avatar' );
-        register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_context' );
-        register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_activate' );
-        register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_ai_model' );
+        register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_context' ); // Register the new context setting
+        register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_activate' ); // Register the activate setting
+        register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_ai_model' ); // Register the AI model setting
     }
 
     public function display_plugin_admin_page() {
@@ -133,3 +134,4 @@ class CODA_Chatbot_Settings {
 if ( is_admin() ) {
     $coda_chatbot_settings = new CODA_Chatbot_Settings();
 }
+
