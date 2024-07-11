@@ -112,6 +112,7 @@
     justify-content: flex-end;
     text-align: right;
     flex-direction: row-reverse;
+    float: right;
 }
 
 .user-message span {
@@ -123,6 +124,7 @@
     color: #333;
     align-self: flex-start;
     text-align: left;
+    float: left;
 }
 
 .bot-message img {
