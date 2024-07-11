@@ -18,6 +18,29 @@ class CODA_Chatbot_Settings {
             6 // Position
         );
     }
+    private function get_openai_models($api_key) {
+        $response = wp_remote_get('https://api.openai.com/v1/models', array(
+            'headers' => array(
+                'Authorization' => 'Bearer ' . $api_key
+            )
+        ));
+
+        if (is_wp_error($response)) {
+            return array();
+        }
+
+        $body = wp_remote_retrieve_body($response);
+        $data = json_decode($body, true);
+
+        if (isset($data['data'])) {
+            return array_filter($data['data'], function($model) {
+                return strpos($model['id'], 'gpt') !== false;
+            });
+        }
+
+        return array();
+    }
+
 
     public function register_settings() {
         register_setting('coda_chatbot_settings_group', 'coda_chatbot_api_key', array($this, 'sanitize'));
@@ -51,10 +74,13 @@ class CODA_Chatbot_Settings {
         $limit_conversations = get_option('coda_chatbot_limit_conversations', 10);
         $limit_characters = get_option('coda_chatbot_limit_characters', 300);
 
+        // Obtener modelos de IA desde la API de OpenAI
+        $models = $this->get_openai_models($api_key);
+
         ?>
         <div class="wrap">
             <h1>AI Chatbot Settings</h1>
-            <?php settings_errors(); // Mostrar mensajes de error/success ?>
+            <?php settings_errors(); ?>
             <form method="post" action="options.php">
                 <?php
                 settings_fields('coda_chatbot_settings_group');
@@ -81,9 +107,15 @@ class CODA_Chatbot_Settings {
                         <th scope="row">AI Model</th>
                         <td>
                             <select name="coda_chatbot_ai_model">
-                                <option value="gpt-3.5-turbo" <?php selected($ai_model, 'gpt-3.5-turbo'); ?>>GPT-3.5 Turbo</option>
-                                <option value="gpt-4" <?php selected($ai_model, 'gpt-4'); ?>>GPT-4</option>
-                                <option value="gpt-4-32k" <?php selected($ai_model, 'gpt-4-32k'); ?>>GPT-4-32k</option>
+                                <?php if (empty($models)) : ?>
+                                    <option value="gpt-3.5-turbo" <?php selected($ai_model, 'gpt-3.5-turbo'); ?>>GPT-3.5 Turbo</option>
+                                    <option value="gpt-4" <?php selected($ai_model, 'gpt-4'); ?>>GPT-4</option>
+                                    <option value="gpt-4-32k" <?php selected($ai_model, 'gpt-4-32k'); ?>>GPT-4-32k</option>
+                                <?php else : ?>
+                                    <?php foreach ($models as $model) : ?>
+                                        <option value="<?php echo esc_attr($model['id']); ?>" <?php selected($ai_model, $model['id']); ?>><?php echo esc_html($model['id']); ?></option>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
                             </select>
                         </td>
                     </tr>
@@ -110,6 +142,7 @@ class CODA_Chatbot_Settings {
         </div>
         <?php
     }
+
 
 }
 
