@@ -31,6 +31,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    cursor: pointer; /* Añadir cursor pointer para indicar que se puede hacer clic */
 }
 
 .chatbot-header img {
@@ -48,14 +49,6 @@
 .chatbot-header .header-info .status {
     font-size: 12px;
     color: #8de28b;
-}
-
-.chatbot-header .minimize-btn {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 20px;
-    cursor: pointer;
 }
 
 .chatbot-messages {

@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const messages = document.querySelector('.chatbot-messages');
     const input = document.querySelector('.chatbot-input');
     const sendBtn = document.querySelector('.chatbot-send-btn');
-    const minimizeBtn = document.querySelector('.minimize-btn');
+    const header = document.querySelector('.chatbot-header');
 
     // Load messages from localStorage
     function loadMessages() {
@@ -119,12 +119,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     sendBtn.addEventListener('click', sendMessage);
 
-    minimizeBtn.addEventListener('click', function() {
+    header.addEventListener('click', function() {
         chatbot.classList.toggle('minimized');
     });
 
     chatbot.addEventListener('click', function(e) {
-        if (chatbot.classList.contains('minimized')) {
+        if (chatbot.classList.contains('minimized') && !e.target.classList.contains('minimize-btn')) {
             chatbot.classList.remove('minimized');
         }
     });
