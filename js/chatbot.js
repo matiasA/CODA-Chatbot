@@ -123,6 +123,12 @@ document.addEventListener('DOMContentLoaded', function() {
         chatbot.classList.toggle('minimized');
     });
 
+    chatbot.addEventListener('click', function(e) {
+        if (chatbot.classList.contains('minimized')) {
+            chatbot.classList.remove('minimized');
+        }
+    });
+
     // Load existing messages from localStorage
     loadMessages();
 });
