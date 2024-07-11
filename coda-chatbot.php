@@ -21,4 +21,12 @@ function enqueue_chatbot_scripts() {
 }
 
 add_action( 'wp_enqueue_scripts', 'enqueue_chatbot_scripts' );
+
+function add_chatbot_container() {
+    if (get_option('coda_chatbot_activate')) { // Check if the chatbot is activated
+        echo '<div id="coda-chatbot"></div>';
+    }
+}
+
+add_action( 'wp_footer', 'add_chatbot_container' );
 ?>

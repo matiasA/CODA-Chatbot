@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const chatbot = document.getElementById('coda-chatbot');
+    if (!chatbot) return; // Return if the chatbot container is not found
+
     const apiKey = codaChatbotOptions.apiKey;
     const welcomeMessage = codaChatbotOptions.welcomeMessage;
     const botAvatar = codaChatbotOptions.botAvatar || 'https://via.placeholder.com/40'; // Default avatar image
