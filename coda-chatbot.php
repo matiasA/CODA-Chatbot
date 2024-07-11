@@ -10,6 +10,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/class-coda-chatbot-settings
 
 function enqueue_chatbot_scripts() {
     if (get_option('coda_chatbot_activate')) { // Check if the chatbot is activated
+        wp_enqueue_style( 'coda-chatbot-css', plugin_dir_url( __FILE__ ) . 'css/chatbot.css' );
         wp_enqueue_script( 'coda-chatbot-js', plugin_dir_url( __FILE__ ) . 'js/chatbot.js', array('jquery'), null, true );
         wp_localize_script( 'coda-chatbot-js', 'codaChatbotOptions', array(
             'apiKey' => get_option('coda_chatbot_api_key'),
