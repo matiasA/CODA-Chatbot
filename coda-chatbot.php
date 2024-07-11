@@ -3,7 +3,7 @@
 Plugin Name: CODA Chatbot
 Description: An AI chatbot plugin for WordPress.
 Version: 1.0
-Author: Cristian Aracena
+Author: Your Name
 */
 
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-coda-chatbot-settings.php';
@@ -22,4 +22,3 @@ function enqueue_chatbot_scripts() {
 
 add_action( 'wp_enqueue_scripts', 'enqueue_chatbot_scripts' );
 ?>
-
