@@ -1,7 +1,5 @@
 # CODA Chatbot
 
-![CODA Chatbot](https://via.placeholder.com/800x200) <!-- Puedes reemplazar esto con una imagen representativa del plugin -->
-
 ## English
 
 ### Introduction
