@@ -108,6 +108,10 @@
     flex-direction: row-reverse;
 }
 
+.user-message span {
+    margin-left: 10px;
+}
+
 .bot-message {
     background: #e0e0e0;
     color: #333;
@@ -115,11 +119,12 @@
     text-align: left;
 }
 
-.bot-message img, .user-message img {
-    max-width: 30px;
-    max-height: 30px;
-    border-radius: 50%;
-    margin: 0 10px;
+.bot-message img {
+    margin-right: 10px;
+}
+
+.user-message img {
+    margin-left: 10px;
 }
 
 #coda-chatbot.minimized {
