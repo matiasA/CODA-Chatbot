@@ -121,7 +121,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     minimizeBtn.addEventListener('click', function() {
         chatbot.classList.toggle('minimized');
-        minimizeBtn.textContent = chatbot.classList.contains('minimized') ? '+' : '-';
     });
 
     // Load existing messages from localStorage
