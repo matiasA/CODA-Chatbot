@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const botAvatar = codaChatbotOptions.botAvatar || 'https://via.placeholder.com/40'; // Default avatar image
     const botContext = codaChatbotOptions.botContext; // Get the bot context
     const aiModel = codaChatbotOptions.aiModel || 'gpt-3.5-turbo'; // Get the selected AI model
+    const limitConversations = parseInt(codaChatbotOptions.limitConversations) || 10; // Default to 10 conversations
+    const limitCharacters = parseInt(codaChatbotOptions.limitCharacters) || 300; // Default to 300 characters
 
     chatbot.innerHTML = `
         <div class="chatbot-container">
@@ -52,12 +54,15 @@ document.addEventListener('DOMContentLoaded', function() {
     function saveMessage(className, img, text) {
         const savedMessages = JSON.parse(localStorage.getItem('chatbotMessages')) || [];
         savedMessages.push({ className, img, text });
+        if (savedMessages.length > limitConversations) {
+            savedMessages.shift(); // Remove the oldest message to maintain the limit
+        }
         localStorage.setItem('chatbotMessages', JSON.stringify(savedMessages));
     }
 
     function sendMessage() {
         const userMessage = input.value;
-        if (userMessage.trim() === '') return;
+        if (userMessage.trim() === '' || userMessage.length > limitCharacters) return;
         input.value = '';
 
         const userMsgElement = document.createElement('div');

@@ -26,6 +26,8 @@ class CODA_Chatbot_Settings {
         register_setting('coda_chatbot_settings_group', 'coda_chatbot_context', array($this, 'sanitize'));
         register_setting('coda_chatbot_settings_group', 'coda_chatbot_activate', array($this, 'sanitize'));
         register_setting('coda_chatbot_settings_group', 'coda_chatbot_ai_model', array($this, 'sanitize'));
+        register_setting('coda_chatbot_settings_group', 'coda_chatbot_limit_conversations', array($this, 'sanitize'));
+        register_setting('coda_chatbot_settings_group', 'coda_chatbot_limit_characters', array($this, 'sanitize'));
     }
 
     public function sanitize($input) {
@@ -46,6 +48,8 @@ class CODA_Chatbot_Settings {
         $bot_context = get_option('coda_chatbot_context', '');
         $ai_model = get_option('coda_chatbot_ai_model', 'gpt-3.5-turbo');
         $activate_chatbot = get_option('coda_chatbot_activate', '0');
+        $limit_conversations = get_option('coda_chatbot_limit_conversations', 10);
+        $limit_characters = get_option('coda_chatbot_limit_characters', 300);
 
         ?>
         <div class="wrap">
@@ -90,6 +94,14 @@ class CODA_Chatbot_Settings {
                                 <span class="slider round"></span>
                             </label>
                         </td>
+                    </tr>
+                    <tr valign="top">
+                        <th scope="row">Limit Conversations</th>
+                        <td><input type="number" name="coda_chatbot_limit_conversations" value="<?php echo esc_attr($limit_conversations); ?>" /></td>
+                    </tr>
+                    <tr valign="top">
+                        <th scope="row">Limit Characters</th>
+                        <td><input type="number" name="coda_chatbot_limit_characters" value="<?php echo esc_attr($limit_characters); ?>" /></td>
                     </tr>
                 </table>
                 <?php submit_button(); ?>
