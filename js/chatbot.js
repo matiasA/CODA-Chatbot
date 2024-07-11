@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const welcomeMessage = codaChatbotOptions.welcomeMessage;
     const botAvatar = codaChatbotOptions.botAvatar || 'https://via.placeholder.com/40'; // Default avatar image
     const botContext = codaChatbotOptions.botContext; // Get the bot context
+    const aiModel = codaChatbotOptions.aiModel || 'gpt-3.5-turbo'; // Get the selected AI model
 
     chatbot.innerHTML = `
         <div class="chatbot-container">
@@ -75,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Authorization': 'Bearer ' + apiKey
             },
             body: JSON.stringify({
-                model: 'gpt-3.5-turbo',
+                model: aiModel,
                 messages: [
                     { role: 'system', content: botContext }, // Add context as system message
                     { role: 'user', content: userMessage }
@@ -132,3 +133,4 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load existing messages from localStorage
     loadMessages();
 });
+
