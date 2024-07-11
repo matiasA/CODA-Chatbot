@@ -1,3 +1,4 @@
+<?php
 class CODA_Chatbot_Settings {
 
     public function __construct() {
@@ -21,9 +22,9 @@ class CODA_Chatbot_Settings {
         register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_api_key' );
         register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_welcome_message' );
         register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_bot_avatar' );
-        register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_context' ); // Register the new context setting
-        register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_activate' ); // Register the activate setting
-        register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_ai_model' ); // Register the AI model setting
+        register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_context' );
+        register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_activate' );
+        register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_ai_model' );
     }
 
     public function display_plugin_admin_page() {
@@ -134,4 +135,3 @@ class CODA_Chatbot_Settings {
 if ( is_admin() ) {
     $coda_chatbot_settings = new CODA_Chatbot_Settings();
 }
-
