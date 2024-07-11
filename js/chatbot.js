@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const apiKey = codaChatbotOptions.apiKey;
     const welcomeMessage = codaChatbotOptions.welcomeMessage;
     const botAvatar = codaChatbotOptions.botAvatar || 'https://via.placeholder.com/40'; // Default avatar image
+    const botContext = codaChatbotOptions.botContext; // Get the bot context
 
     chatbot.innerHTML = `
         <div class="chatbot-container">
@@ -73,7 +74,10 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             body: JSON.stringify({
                 model: 'gpt-3.5-turbo',
-                messages: [{ role: 'user', content: userMessage }]
+                messages: [
+                    { role: 'system', content: botContext }, // Add context as system message
+                    { role: 'user', content: userMessage }
+                ]
             })
         })
         .then(response => response.json())

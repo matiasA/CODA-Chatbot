@@ -16,10 +16,10 @@ class CODA_Chatbot_Settings {
     }
 
     public function register_settings() {
-        register_setting('coda_chatbot_settings_group', 'coda_chatbot_enabled', array('sanitize_callback' => 'sanitize_text_field', 'default' => 'yes'));
-        register_setting('coda_chatbot_settings_group', 'coda_chatbot_api_key', 'sanitize_text_field');
-        register_setting('coda_chatbot_settings_group', 'coda_chatbot_welcome_message', 'sanitize_text_field');
-        register_setting('coda_chatbot_settings_group', 'coda_chatbot_bot_avatar', 'sanitize_text_field');
+    register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_api_key' );
+    register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_welcome_message' );
+    register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_bot_avatar' );
+    register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_context' ); // Register the new context setting
     }
 
     public function enqueue_media_uploader() {
@@ -50,42 +50,34 @@ class CODA_Chatbot_Settings {
         });
     }
 
-    public function settings_page() {
+    public function display_plugin_admin_page() {
         ?>
         <div class="wrap">
-            <h1>CODA Chatbot Settings</h1>
+            <h1>AI Chatbot Settings</h1>
             <form method="post" action="options.php">
                 <?php
-                settings_fields('coda_chatbot_settings_group');
-                do_settings_sections('coda_chatbot_settings_group');
+                settings_fields( 'coda_chatbot_settings_group' );
+                do_settings_sections( 'coda_chatbot_settings_group' );
                 ?>
                 <table class="form-table">
                     <tr valign="top">
-                        <th scope="row">Enable Chatbot</th>
-                        <td>
-                            <select name="coda_chatbot_enabled">
-                                <option value="yes" <?php selected(get_option('coda_chatbot_enabled', 'yes'), 'yes'); ?>>Yes</option>
-                                <option value="no" <?php selected(get_option('coda_chatbot_enabled', 'yes'), 'no'); ?>>No</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr valign="top">
-                        <th scope="row">API Key</th>
-                        <td><input type="text" name="coda_chatbot_api_key" value="<?php echo esc_attr(get_option('coda_chatbot_api_key')); ?>" class="regular-text" /></td>
+                        <th scope="row">OpenAI API Key</th>
+                        <td><input type="text" name="coda_chatbot_api_key" value="<?php echo esc_attr( get_option('coda_chatbot_api_key') ); ?>" /></td>
                     </tr>
                     <tr valign="top">
                         <th scope="row">Welcome Message</th>
-                        <td><input type="text" name="coda_chatbot_welcome_message" value="<?php echo esc_attr(get_option('coda_chatbot_welcome_message')); ?>" class="regular-text" /></td>
+                        <td><input type="text" name="coda_chatbot_welcome_message" value="<?php echo esc_attr( get_option('coda_chatbot_welcome_message') ); ?>" /></td>
                     </tr>
                     <tr valign="top">
                         <th scope="row">Bot Avatar URL</th>
-                        <td>
-                            <input type="text" id="coda_chatbot_bot_avatar" name="coda_chatbot_bot_avatar" value="<?php echo esc_attr(get_option('coda_chatbot_bot_avatar')); ?>" class="regular-text" />
-                            <button type="button" class="button" id="coda_chatbot_bot_avatar_button">Select Image</button>
-                        </td>
+                        <td><input type="text" name="coda_chatbot_bot_avatar" value="<?php echo esc_attr( get_option('coda_chatbot_bot_avatar') ); ?>" /></td>
+                    </tr>
+                    <tr valign="top">
+                        <th scope="row">Bot Context</th>
+                        <td><textarea name="coda_chatbot_context" rows="5" cols="50"><?php echo esc_attr( get_option('coda_chatbot_context') ); ?></textarea></td>
                     </tr>
                 </table>
-                <p class="submit"><input type="submit" class="button-primary" value="Save Changes" /></p>
+                <?php submit_button(); ?>
             </form>
         </div>
         <?php
