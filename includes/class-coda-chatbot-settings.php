@@ -4,50 +4,27 @@ if (!defined('ABSPATH')) {
 }
 
 class CODA_Chatbot_Settings {
-
+    
     public function __construct() {
-        add_action('admin_menu', array($this, 'add_settings_page'));
-        add_action('admin_init', array($this, 'register_settings'));
-        add_action('admin_enqueue_scripts', array($this, 'enqueue_media_uploader'));
+        add_action( 'admin_menu', array( $this, 'add_plugin_page' ) );
+        add_action( 'admin_init', array( $this, 'register_settings' ) );
     }
 
-    public function add_settings_page() {
-        add_options_page('CODA Chatbot Settings', 'CODA Chatbot', 'manage_options', 'coda-chatbot', array($this, 'settings_page'));
+    public function add_plugin_page() {
+        add_options_page(
+            'AI Chatbot Settings',
+            'AI Chatbot',
+            'manage_options',
+            'coda-chatbot-settings',
+            array( $this, 'display_plugin_admin_page' )
+        );
     }
 
     public function register_settings() {
-    register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_api_key' );
-    register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_welcome_message' );
-    register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_bot_avatar' );
-    register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_context' ); // Register the new context setting
-    }
-
-    public function enqueue_media_uploader() {
-        wp_enqueue_media();
-        // Instead of directly outputting the script, we'll enqueue it to be output at the right time
-        add_action('admin_footer', function() {
-            ?>
-            <script type="text/javascript">
-                jQuery(document).ready(function($) {
-                    $('#coda_chatbot_bot_avatar_button').click(function(e) {
-                        e.preventDefault();
-                        var image = wp.media({
-                            title: 'Select or Upload Image',
-                            button: {
-                                text: 'Use this image'
-                            },
-                            multiple: false
-                        }).open()
-                        .on('select', function() {
-                            var uploaded_image = image.state().get('selection').first();
-                            var image_url = uploaded_image.toJSON().url;
-                            $('#coda_chatbot_bot_avatar').val(image_url);
-                        });
-                    });
-                });
-            </script>
-            <?php
-        });
+        register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_api_key' );
+        register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_welcome_message' );
+        register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_bot_avatar' );
+        register_setting( 'coda_chatbot_settings_group', 'coda_chatbot_context' ); // Register the new context setting
     }
 
     public function display_plugin_admin_page() {
@@ -83,4 +60,9 @@ class CODA_Chatbot_Settings {
         <?php
     }
 }
+
+if ( is_admin() ) {
+    $coda_chatbot_settings = new CODA_Chatbot_Settings();
+}
+
 ?>

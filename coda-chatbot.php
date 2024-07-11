@@ -34,4 +34,6 @@ function enqueue_chatbot_scripts() {
         'botContext' => get_option('coda_chatbot_context') // Pass context to JavaScript
     ));
 }
+
+add_action( 'wp_enqueue_scripts', 'enqueue_chatbot_scripts' );
 ?>
