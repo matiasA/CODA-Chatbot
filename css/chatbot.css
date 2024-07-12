@@ -218,3 +218,19 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+.chatbot-container.minimized .chatbot-messages,
+.chatbot-container.minimized .chatbot-input-container {
+    display: none;
+}
+
+.chatbot-container.minimized {
+    width: 50px; /* Ajusta según tus necesidades */
+    height: 50px; /* Ajusta según tus necesidades */
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.chatbot-container.minimized .chatbot-header {
+    justify-content: center;
+    align-items: center;
+}
