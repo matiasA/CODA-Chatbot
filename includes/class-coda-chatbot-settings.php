@@ -88,6 +88,15 @@ class CODA_Chatbot_Settings {
                 ?>
                 <table class="form-table">
                     <tr valign="top">
+                        <th scope="row">Activate Chatbot</th>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" name="coda_chatbot_activate" value="1" <?php checked(1, $activate_chatbot, true); ?>>
+                                <span class="slider round"></span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr valign="top">
                         <th scope="row">OpenAI API Key</th>
                         <td><input type="text" name="coda_chatbot_api_key" value="<?php echo esc_attr($api_key); ?>" /></td>
                     </tr>
@@ -117,15 +126,6 @@ class CODA_Chatbot_Settings {
                                     <?php endforeach; ?>
                                 <?php endif; ?>
                             </select>
-                        </td>
-                    </tr>
-                    <tr valign="top">
-                        <th scope="row">Activate Chatbot</th>
-                        <td>
-                            <label class="switch">
-                                <input type="checkbox" name="coda_chatbot_activate" value="1" <?php checked(1, $activate_chatbot, true); ?>>
-                                <span class="slider round"></span>
-                            </label>
                         </td>
                     </tr>
                     <tr valign="top">
