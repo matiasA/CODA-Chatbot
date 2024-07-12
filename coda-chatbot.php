@@ -25,7 +25,7 @@ add_action( 'wp_enqueue_scripts', 'enqueue_chatbot_scripts' );
 
 function add_chatbot_container() {
     if (get_option('coda_chatbot_activate')) { // Check if the chatbot is activated
-        echo '<div id="coda-chatbot"></div>';
+        echo '<div id="coda-chatbot" class="minimized"></div>';
     }
 }
 
