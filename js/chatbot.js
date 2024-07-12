@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const limitCharacters = parseInt(codaChatbotOptions.limitCharacters) || 300; // Default to 300 characters
 
     chatbot.innerHTML = `
-        <div class="chatbot-container">
+        <div class="chatbot-container" minimized>
             <div class="chatbot-header">
                 <div style="display: flex; align-items: center;">
                     <img src="${botAvatar}" alt="Bot Avatar">
