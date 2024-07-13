@@ -137,11 +137,14 @@ class CODA_Chatbot_Settings {
                         <td><input type="number" name="coda_chatbot_limit_characters" value="<?php echo esc_attr($limit_characters); ?>" /></td>
                     </tr>
                 </table>
-                <?php submit_button(); ?>
+                <div class="submit">
+                    <?php submit_button(); ?>
+                </div>
             </form>
         </div>
         <?php
     }
+
 
 
 }
