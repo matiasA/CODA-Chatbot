@@ -81,9 +81,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (userMessage === '' || userMessage.length > limitCharacters) return;
         input.value = '';
 
-        const userMsgElement = createMessageElement('user-message', null, userMessage);
+        const userMsgElement = createMessageElement('user-message', 'https://via.placeholder.com/24', userMessage);
         messages.appendChild(userMsgElement);
-        saveMessage('user-message', null, userMessage);
+        saveMessage('user-message', 'https://via.placeholder.com/24', userMessage);
 
         conversationHistory.push({ role: 'user', content: userMessage });
 
@@ -110,18 +110,18 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
             const botMessage = data.choices[0].message.content;
 
-            const botMsgElement = createMessageElement('bot-message', null, botMessage);
+            const botMsgElement = createMessageElement('bot-message', 'https://via.placeholder.com/24', botMessage);
             messages.appendChild(botMsgElement);
-            saveMessage('bot-message', null, botMessage);
+            saveMessage('bot-message', 'https://via.placeholder.com/24', botMessage);
 
             conversationHistory.push({ role: 'assistant', content: botMessage });
 
             showFeedback();
         } catch (error) {
             console.error('Error:', error);
-            const errorMsg = createMessageElement('bot-message', null, `Error: ${error.message}`);
+            const errorMsg = createMessageElement('bot-message', 'https://via.placeholder.com/24', `Error: ${error.message}`);
             messages.appendChild(errorMsg);
-            saveMessage('bot-message', null, `Error: ${error.message}`);
+            saveMessage('bot-message', 'https://via.placeholder.com/24', `Error: ${error.message}`);
         }
 
         messages.scrollTop = messages.scrollHeight;
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function submitFeedback(value) {
-        // Here you would typically send the feedback to your server
+        // Aquí enviarías la retroalimentación al servidor
         console.log(`User feedback: ${value}`);
         hideFeedback();
     }
@@ -163,11 +163,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     loadMessages();
 
-    // Display welcome message
+    // Mostrar mensaje de bienvenida
     if (conversationHistory.length === 0) {
-        const welcomeMsgElement = createMessageElement('bot-message', null, welcomeMessage);
+        const welcomeMsgElement = createMessageElement('bot-message', botAvatar, welcomeMessage);
         messages.appendChild(welcomeMsgElement);
-        saveMessage('bot-message', null, welcomeMessage);
+        saveMessage('bot-message', botAvatar, welcomeMessage);
     }
 
     function toggleChatbot() {
@@ -198,4 +198,5 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
 
