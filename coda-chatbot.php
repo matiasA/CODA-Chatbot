@@ -43,7 +43,7 @@ function coda_chatbot_display() {
     </div>
     <?php
 }
-add_shortcode('wp_footer', 'coda_chatbot_display');
+add_shortcode('coda_chatbot', 'coda_chatbot_display');
 
 
 add_action( 'wp_footer', 'add_chatbot_container' );
