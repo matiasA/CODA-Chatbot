@@ -138,4 +138,30 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load existing messages from localStorage
     loadMessages();
 });
+document.addEventListener('DOMContentLoaded', function() {
+    // Obtener el estado del chatbot de localStorage
+    var chatbotState = localStorage.getItem('chatbotState');
+
+    // Referencia al contenedor del chatbot
+    var chatbotContainer = document.getElementById('coda-chatbot-container');
+
+    // Si el estado es "open", muestra el chatbot
+    if (chatbotState === 'open') {
+        chatbotContainer.style.display = 'block';
+    } else {
+        chatbotContainer.style.display = 'none';
+    }
+
+    // Agregar evento para abrir el chatbot
+    document.getElementById('open-chatbot-button').addEventListener('click', function() {
+        chatbotContainer.style.display = 'block';
+        localStorage.setItem('chatbotState', 'open');
+    });
+
+    // Agregar evento para cerrar el chatbot
+    document.getElementById('close-chatbot-button').addEventListener('click', function() {
+        chatbotContainer.style.display = 'none';
+        localStorage.setItem('chatbotState', 'closed');
+    });
+});
 

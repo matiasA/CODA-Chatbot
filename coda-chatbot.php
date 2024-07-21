@@ -29,5 +29,22 @@ function add_chatbot_container() {
     }
 }
 
+
+function coda_chatbot_display() {
+    ?>
+    <!-- Botón para abrir el chatbot -->
+    <button id="open-chatbot-button">Abrir Chatbot</button>
+
+    <!-- Contenedor del chatbot -->
+    <div id="coda-chatbot-container" style="display: none;">
+        <!-- Contenido del chatbot -->
+        <button id="close-chatbot-button">Cerrar Chatbot</button>
+        <!-- Aquí iría el contenido del chatbot -->
+    </div>
+    <?php
+}
+add_shortcode('coda_chatbot', 'coda_chatbot_display');
+
+
 add_action( 'wp_footer', 'add_chatbot_container' );
 ?>
