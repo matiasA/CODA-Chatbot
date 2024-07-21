@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div style="display: flex; align-items: center;">
                     <img src="${botAvatar}" alt="Bot Avatar">
                     <div class="header-info">
-                        <span>Chatbot</span>
+                        <span>Customer Support</span>
                         <span class="status">Online</span>
                     </div>
                 </div>
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             <div class="chatbot-messages"></div>
             <div class="chatbot-input-container">
-                <input type="text" class="chatbot-input" placeholder="Write a message...">
+                <input type="text" class="chatbot-input" placeholder="Start typing your message...">
                 <button class="chatbot-send-btn">➤</button>
             </div>
             <div class="chatbot-feedback hidden">
@@ -81,9 +81,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (userMessage === '' || userMessage.length > limitCharacters) return;
         input.value = '';
 
-        const userMsgElement = createMessageElement('user-message', botAvatar, userMessage);
+        const userMsgElement = createMessageElement('user-message', null, userMessage);
         messages.appendChild(userMsgElement);
-        saveMessage('user-message', botAvatar, userMessage);
+        saveMessage('user-message', null, userMessage);
 
         conversationHistory.push({ role: 'user', content: userMessage });
 
@@ -110,18 +110,18 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
             const botMessage = data.choices[0].message.content;
 
-            const botMsgElement = createMessageElement('bot-message', botAvatar, botMessage);
+            const botMsgElement = createMessageElement('bot-message', null, botMessage);
             messages.appendChild(botMsgElement);
-            saveMessage('bot-message', botAvatar, botMessage);
+            saveMessage('bot-message', null, botMessage);
 
             conversationHistory.push({ role: 'assistant', content: botMessage });
 
             showFeedback();
         } catch (error) {
             console.error('Error:', error);
-            const errorMsg = createMessageElement('bot-message', botAvatar, `Error: ${error.message}`);
+            const errorMsg = createMessageElement('bot-message', null, `Error: ${error.message}`);
             messages.appendChild(errorMsg);
-            saveMessage('bot-message', botAvatar, `Error: ${error.message}`);
+            saveMessage('bot-message', null, `Error: ${error.message}`);
         }
 
         messages.scrollTop = messages.scrollHeight;
@@ -165,35 +165,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Display welcome message
     if (conversationHistory.length === 0) {
-        const welcomeMsgElement = createMessageElement('bot-message', botAvatar, welcomeMessage);
+        const welcomeMsgElement = createMessageElement('bot-message', null, welcomeMessage);
         messages.appendChild(welcomeMsgElement);
-        saveMessage('bot-message', botAvatar, welcomeMessage);
+        saveMessage('bot-message', null, welcomeMessage);
     }
-    // Agregar esta función para alternar entre minimizado y maximizado
+
     function toggleChatbot() {
         chatbot.classList.toggle('minimized');
     }
 
-    // Crear el ícono del chatbot para cuando está minimizado
     const chatbotIcon = document.createElement('div');
     chatbotIcon.className = 'chatbot-icon';
-    chatbotIcon.innerHTML = '💬'; // Puedes cambiar esto por una imagen si lo prefieres
+    chatbotIcon.innerHTML = '💬';
     chatbot.appendChild(chatbotIcon);
 
-    // Agregar el evento de clic al ícono del chatbot
     chatbotIcon.addEventListener('click', toggleChatbot);
 
-    // Modificar el evento de clic en el encabezado para incluir la minimización
     const chatbotHeader = chatbot.querySelector('.chatbot-header');
     if (chatbotHeader) {
         const minimizeBtn = chatbotHeader.querySelector('.minimize-btn');
         if (minimizeBtn) {
             minimizeBtn.addEventListener('click', function(e) {
-                e.stopPropagation(); // Evitar que el clic se propague al encabezado
+                e.stopPropagation();
                 toggleChatbot();
             });
         }
-        
+
         chatbotHeader.addEventListener('click', function(e) {
             if (chatbot.classList.contains('minimized')) {
                 toggleChatbot();
