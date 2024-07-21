@@ -1,14 +1,16 @@
 document.addEventListener('DOMContentLoaded', function() {
     const chatbot = document.getElementById('coda-chatbot');
-    if (!chatbot) return; // Return if the chatbot container is not found
+    if (!chatbot) return;
 
     const apiKey = codaChatbotOptions.apiKey;
     const welcomeMessage = codaChatbotOptions.welcomeMessage;
-    const botAvatar = codaChatbotOptions.botAvatar || 'https://via.placeholder.com/40'; // Default avatar image
-    const botContext = codaChatbotOptions.botContext; // Get the bot context
-    const aiModel = codaChatbotOptions.aiModel || 'gpt-3.5-turbo'; // Get the selected AI model
-    const limitConversations = parseInt(codaChatbotOptions.limitConversations) || 10; // Default to 10 conversations
-    const limitCharacters = parseInt(codaChatbotOptions.limitCharacters) || 300; // Default to 300 characters
+    const botAvatar = codaChatbotOptions.botAvatar || 'https://via.placeholder.com/40';
+    const botContext = codaChatbotOptions.botContext;
+    const aiModel = codaChatbotOptions.aiModel || 'gpt-3.5-turbo';
+    const limitConversations = parseInt(codaChatbotOptions.limitConversations) || 10;
+    const limitCharacters = parseInt(codaChatbotOptions.limitCharacters) || 300;
+
+    let conversationHistory = [];
 
     chatbot.innerHTML = `
         <div class="chatbot-container">
@@ -27,6 +29,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 <input type="text" class="chatbot-input" placeholder="Write a message...">
                 <button class="chatbot-send-btn">➤</button>
             </div>
+            <div class="chatbot-feedback hidden">
+                <span>Was this response helpful?</span>
+                <button class="feedback-btn" data-value="yes">👍</button>
+                <button class="feedback-btn" data-value="no">👎</button>
+            </div>
         </div>
     `;
 
@@ -34,87 +41,104 @@ document.addEventListener('DOMContentLoaded', function() {
     const input = document.querySelector('.chatbot-input');
     const sendBtn = document.querySelector('.chatbot-send-btn');
     const header = document.querySelector('.chatbot-header');
+    const feedbackContainer = document.querySelector('.chatbot-feedback');
+    const feedbackBtns = document.querySelectorAll('.feedback-btn');
 
-    // Load messages from localStorage
     function loadMessages() {
         const savedMessages = JSON.parse(localStorage.getItem('chatbotMessages')) || [];
         savedMessages.forEach(msg => {
-            const messageElement = document.createElement('div');
-            messageElement.className = msg.className;
-            messageElement.innerHTML = `
-                ${msg.img ? `<img src="${msg.img}" alt="Avatar">` : ''}
-                <span>${msg.text}</span>
-            `;
+            const messageElement = createMessageElement(msg.className, msg.img, msg.text);
             messages.appendChild(messageElement);
         });
         messages.scrollTop = messages.scrollHeight;
+        conversationHistory = savedMessages.map(msg => ({
+            role: msg.className === 'user-message' ? 'user' : 'assistant',
+            content: msg.text
+        }));
     }
 
-    // Save messages to localStorage
     function saveMessage(className, img, text) {
         const savedMessages = JSON.parse(localStorage.getItem('chatbotMessages')) || [];
         savedMessages.push({ className, img, text });
-        if (savedMessages.length > limitConversations) {
-            savedMessages.shift(); // Remove the oldest message to maintain the limit
+        if (savedMessages.length > limitConversations * 2) {
+            savedMessages.splice(0, 2);
         }
         localStorage.setItem('chatbotMessages', JSON.stringify(savedMessages));
     }
 
-    function sendMessage() {
-        const userMessage = input.value;
-        if (userMessage.trim() === '' || userMessage.length > limitCharacters) return;
+    function createMessageElement(className, img, text) {
+        const messageElement = document.createElement('div');
+        messageElement.className = className;
+        messageElement.innerHTML = `
+            ${img ? `<img src="${img}" alt="Avatar">` : ''}
+            <span>${text}</span>
+        `;
+        return messageElement;
+    }
+
+    async function sendMessage() {
+        const userMessage = input.value.trim();
+        if (userMessage === '' || userMessage.length > limitCharacters) return;
         input.value = '';
 
-        const userMsgElement = document.createElement('div');
-        userMsgElement.className = 'user-message';
-        userMsgElement.innerHTML = `
-            <span>${userMessage}</span>
-            <img src="${botAvatar}" alt="User Avatar">
-        `;
+        const userMsgElement = createMessageElement('user-message', botAvatar, userMessage);
         messages.appendChild(userMsgElement);
         saveMessage('user-message', botAvatar, userMessage);
 
-        fetch('https://api.openai.com/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + apiKey
-            },
-            body: JSON.stringify({
-                model: aiModel,
-                messages: [
-                    { role: 'system', content: botContext }, // Add context as system message
-                    { role: 'user', content: userMessage }
-                ]
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            const botMsgElement = document.createElement('div');
-            botMsgElement.className = 'bot-message';
-            botMsgElement.innerHTML = `
-                <img src="${botAvatar}" alt="Bot Avatar">
-                <span>${data.choices[0].message.content}</span>
-            `;
-            messages.appendChild(botMsgElement);
-            saveMessage('bot-message', botAvatar, data.choices[0].message.content);
+        conversationHistory.push({ role: 'user', content: userMessage });
 
-            // Scroll to the bottom of the chat messages
-            messages.scrollTop = messages.scrollHeight;
-        })
-        .catch(error => {
-            const botMsgElement = document.createElement('div');
-            botMsgElement.className = 'bot-message';
-            botMsgElement.innerHTML = `
-                <img src="${botAvatar}" alt="Bot Avatar">
-                <span>Error: ${error.message}</span>
-            `;
+        try {
+            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + apiKey
+                },
+                body: JSON.stringify({
+                    model: aiModel,
+                    messages: [
+                        { role: 'system', content: botContext },
+                        ...conversationHistory
+                    ]
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('API request failed');
+            }
+
+            const data = await response.json();
+            const botMessage = data.choices[0].message.content;
+
+            const botMsgElement = createMessageElement('bot-message', botAvatar, botMessage);
             messages.appendChild(botMsgElement);
+            saveMessage('bot-message', botAvatar, botMessage);
+
+            conversationHistory.push({ role: 'assistant', content: botMessage });
+
+            showFeedback();
+        } catch (error) {
+            console.error('Error:', error);
+            const errorMsg = createMessageElement('bot-message', botAvatar, `Error: ${error.message}`);
+            messages.appendChild(errorMsg);
             saveMessage('bot-message', botAvatar, `Error: ${error.message}`);
+        }
 
-            // Scroll to the bottom of the chat messages
-            messages.scrollTop = messages.scrollHeight;
-        });
+        messages.scrollTop = messages.scrollHeight;
+    }
+
+    function showFeedback() {
+        feedbackContainer.classList.remove('hidden');
+    }
+
+    function hideFeedback() {
+        feedbackContainer.classList.add('hidden');
+    }
+
+    function submitFeedback(value) {
+        // Here you would typically send the feedback to your server
+        console.log(`User feedback: ${value}`);
+        hideFeedback();
     }
 
     input.addEventListener('keypress', function(e) {
@@ -125,43 +149,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
     sendBtn.addEventListener('click', sendMessage);
 
-    header.addEventListener('click', function() {
-        chatbot.classList.toggle('minimized');
-    });
-
-    chatbot.addEventListener('click', function(e) {
-        if (chatbot.classList.contains('minimized') && !e.target.classList.contains('minimize-btn')) {
-            chatbot.classList.remove('minimized');
+    header.addEventListener('click', function(e) {
+        if (!e.target.classList.contains('minimize-btn')) {
+            chatbot.classList.toggle('minimized');
         }
     });
 
-    // Load existing messages from localStorage
+    feedbackBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            submitFeedback(this.dataset.value);
+        });
+    });
+
     loadMessages();
-});
-document.addEventListener('DOMContentLoaded', function() {
-    // Obtener el estado del chatbot de localStorage
-    var chatbotState = localStorage.getItem('chatbotState');
 
-    // Referencia al contenedor del chatbot
-    var chatbotContainer = document.getElementById('coda-chatbot-container');
-
-    // Si el estado es "open", muestra el chatbot
-    if (chatbotState === 'open') {
-        chatbotContainer.style.display = 'block';
-    } else {
-        chatbotContainer.style.display = 'none';
+    // Display welcome message
+    if (conversationHistory.length === 0) {
+        const welcomeMsgElement = createMessageElement('bot-message', botAvatar, welcomeMessage);
+        messages.appendChild(welcomeMsgElement);
+        saveMessage('bot-message', botAvatar, welcomeMessage);
     }
-
-    // Agregar evento para abrir el chatbot
-    document.getElementById('open-chatbot-button').addEventListener('click', function() {
-        chatbotContainer.style.display = 'block';
-        localStorage.setItem('chatbotState', 'open');
-    });
-
-    // Agregar evento para cerrar el chatbot
-    document.getElementById('close-chatbot-button').addEventListener('click', function() {
-        chatbotContainer.style.display = 'none';
-        localStorage.setItem('chatbotState', 'closed');
-    });
 });
 
