@@ -164,3 +164,34 @@
 .hidden {
     display: none;
 }
+#coda-chatbot {
+    /* Estilos existentes... */
+    transition: all 0.3s ease;
+}
+
+#coda-chatbot.minimized {
+    width: 60px;
+    height: 60px;
+    overflow: hidden;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+#coda-chatbot.minimized .chatbot-container {
+    display: none;
+}
+
+.chatbot-icon {
+    display: none;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    background-color: #0073aa;
+    color: white;
+}
+
+#coda-chatbot.minimized .chatbot-icon {
+    display: flex;
+}

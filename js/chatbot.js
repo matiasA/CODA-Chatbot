@@ -169,5 +169,36 @@ document.addEventListener('DOMContentLoaded', function() {
         messages.appendChild(welcomeMsgElement);
         saveMessage('bot-message', botAvatar, welcomeMessage);
     }
+    // Agregar esta función para alternar entre minimizado y maximizado
+    function toggleChatbot() {
+        chatbot.classList.toggle('minimized');
+    }
+
+    // Crear el ícono del chatbot para cuando está minimizado
+    const chatbotIcon = document.createElement('div');
+    chatbotIcon.className = 'chatbot-icon';
+    chatbotIcon.innerHTML = '💬'; // Puedes cambiar esto por una imagen si lo prefieres
+    chatbot.appendChild(chatbotIcon);
+
+    // Agregar el evento de clic al ícono del chatbot
+    chatbotIcon.addEventListener('click', toggleChatbot);
+
+    // Modificar el evento de clic en el encabezado para incluir la minimización
+    const chatbotHeader = chatbot.querySelector('.chatbot-header');
+    if (chatbotHeader) {
+        const minimizeBtn = chatbotHeader.querySelector('.minimize-btn');
+        if (minimizeBtn) {
+            minimizeBtn.addEventListener('click', function(e) {
+                e.stopPropagation(); // Evitar que el clic se propague al encabezado
+                toggleChatbot();
+            });
+        }
+        
+        chatbotHeader.addEventListener('click', function(e) {
+            if (chatbot.classList.contains('minimized')) {
+                toggleChatbot();
+            }
+        });
+    }
 });
 
